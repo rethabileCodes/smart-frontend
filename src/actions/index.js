@@ -2,6 +2,7 @@
 import { FETCH_USER, FETCH_LOCKERS, FETCH_AVAILABLE_LOCKERS, FETCH_RESERVED_LOCKERS, FETCH_MY_LOCKERS} from './types';
 
 
+
 export const  fetchUser =  () => async dispatch => {
     const res = await fetch("https://smart-locker-backend.herokuapp.com/api/auth/me",{
       
@@ -15,7 +16,10 @@ export const  fetchUser =  () => async dispatch => {
  });
     const data = await res.json();
     console.log('return FETCH_USER', data);
+
+    fetchMyLockers(data._id);
     dispatch({type: FETCH_USER, payload: data.message ? false: data});
+
 
 };
 
@@ -27,7 +31,6 @@ export const  fetchLockers =  () => async dispatch => {
             'Content-Type': 'application/json' },
              credentials: 'include', 
              method: 'GET',
-             
              
  });
     const data = await res.json();
@@ -68,7 +71,13 @@ export const  fetchReservedLockers =  () => async dispatch => {
 
 };
 
-export const  fetchMyLockers =  () => async dispatch => {
+
+function filter(list,id){
+    console.log("filtering based on id:", id)
+    return list.filter(e => e.depositor == id)
+}
+
+export const  fetchMyLockers =  (id) => async dispatch => {
     const res = await fetch("https://smart-locker-backend.herokuapp.com/api/locker",{
       
     headers: { 
@@ -78,8 +87,11 @@ export const  fetchMyLockers =  () => async dispatch => {
              method: 'GET'
              
  });
+
+
+
     const data = await res.json();
-    console.log('return FETCH_AVAILABLE_LOCKERS', data);
+    console.log('return FETCH_MY_LOCKERS', filter(data,id));
     dispatch({type: FETCH_MY_LOCKERS, payload: data.message ? false: data});
 
 };

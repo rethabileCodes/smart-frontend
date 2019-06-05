@@ -1,14 +1,11 @@
-import {FETCH_RESERVED_LOCKERS} from '../actions/types';
+import {FETCH_MY_LOCKERS} from '../actions/types';
 
-function filter(list){
-    return list.filter( e => e.isReserved != true)
-}
 
 
 export default function(state = false, action){
     switch(action.type){
-        case FETCH_RESERVED_LOCKERS:
-        return filter(action.payload )|| false;
+        case FETCH_MY_LOCKERS:
+        return action.payload || false;
          default:
         return state;
     }

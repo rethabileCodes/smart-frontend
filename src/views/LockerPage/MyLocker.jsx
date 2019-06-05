@@ -12,13 +12,16 @@ import Payment from "@material-ui/icons/Payment";
 import withStyles from "@material-ui/core/styles/withStyles";
 import profilePageStyle from "assets/jss/material-kit-react/views/profilePage.jsx";
 import AvailableLockers from "components/AvailableLockers.jsx";
+import MyLockers from "components/MyLockers.jsx";
 
 import {connect} from "react-redux";
 import * as actions from "actions";
 class MyLockerPage extends React.Component {
 
   componentDidMount(){
+    
     this.props.fetchAvailableLockers();
+    this.props.fetchMyLockers(this.props.auth._id);
   }
 
 render(){
@@ -43,9 +46,7 @@ render(){
                 tabName: "Reserved Lockers",
                 tabIcon: ShowChart,
                 tabContent: (
-                  <p className={classes.textCenter}>
-                  this is where statistics of previous locker rentals will appear
-                  </p>
+                  <MyLockers/>
                 )
               }
             
@@ -61,7 +62,7 @@ render(){
 }
 
 
-function msp({availableLockers}){
-  return {availableLockers};
+function msp({availableLockers,auth}){
+  return {availableLockers,auth};
 }
 export default connect(msp,actions) (withStyles(profilePageStyle)(MyLockerPage));
